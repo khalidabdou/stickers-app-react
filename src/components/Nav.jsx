@@ -6,18 +6,15 @@ class NavBar extends Component {
 
     render() {
         return (
-            <Nav className="navbar navbar-expand-lg navbar-light bg-dark justify-content-center"
-                activeKey="/home"
-                onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
-            >
+            <Nav className="navbar navbar-expand-lg navbar-light bg-dark justify-content-center">
                 <Nav.Item className=''>
-                    <Nav.Link href="/home">Dashboard</Nav.Link>
+                    <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-1">categories</Nav.Link>
+                    <Nav.Link href="/categories">Categories</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-2">Stickers</Nav.Link>
+                    <Nav.Link href='/packs' eventKey="link-2">Stickers</Nav.Link>
                 </Nav.Item>
             </Nav>
         )

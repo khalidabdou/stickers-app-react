@@ -15,7 +15,7 @@ class Pack extends Component {
                 <Card.Body>
                     <Card.Title>folder : 'JHDH52545' | views : 1000 | download : 120</Card.Title>
                     <Card.Text className='m-1'>
-                        {this.state.pack.map((item,index)=>{
+                        {this.state.pack.map((item)=>{
                            return <Image src={item} className='m-2' rounded width={70}  height={70}/>  
                         }
                         )}

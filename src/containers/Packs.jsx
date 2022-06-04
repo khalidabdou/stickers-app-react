@@ -3,8 +3,6 @@ import Pack from "../components/Pack";
 import { DropdownButton, Dropdown, Button,Nav } from 'react-bootstrap';
 
 class Packs extends Component {
-
-
     render() {
         return (
             <div>
