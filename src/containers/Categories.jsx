@@ -1,11 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Category from '../components/Category';
-import { Row, Col, Button, Nav } from 'react-bootstrap'
+import ModelAddCategory from '../components/ModelAddCategory';
+import { Row, Col, Button, Nav, Modal } from 'react-bootstrap'
 
 
 class Categories extends Component {
-    state = {}
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            open:false,
+        }
+    }
+    
+
+
     render() {
+
         return (
             <div className='container'>
                 <Nav className="nav justify-content-end m-2 text-success"
@@ -13,10 +25,9 @@ class Categories extends Component {
                     onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
                 >
                     <Nav.Item>
-                        <Button href="#" variant="success" className=" me-2">Add Pack</Button>
+                    <ModelAddCategory />
                     </Nav.Item>
                 </Nav>
-
                 <Row className=''>
                     <Col xs ><Category /></Col>
                     <Col xs><Category /></Col>
@@ -27,6 +38,7 @@ class Categories extends Component {
                     <Col xs><Category /></Col>
                     <Col xs><Category /></Col>
                 </Row>
+               
             </div>
 
 
