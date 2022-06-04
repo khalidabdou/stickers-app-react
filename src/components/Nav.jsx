@@ -6,15 +6,15 @@ class NavBar extends Component {
 
     render() {
         return (
-            <Nav className="navbar navbar-expand-lg navbar-light bg-dark justify-content-center">
+            <Nav className="navbar navbar-expand-lg navbar-light bg-dark justify-content-center text-success">
                 <Nav.Item className=''>
-                    <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                    <Nav.Link href="/dashboard" className='text-white' >Dashboard</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link href="/categories">Categories</Nav.Link>
+                    <Nav.Link href="/categories" className='text-white' >Categories</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link href='/packs' eventKey="link-2">Stickers</Nav.Link>
+                    <Nav.Link href='/packs' className='text-white' >Stickers</Nav.Link>
                 </Nav.Item>
             </Nav>
         )
