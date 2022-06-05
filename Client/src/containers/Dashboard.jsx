@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import tutorialService from "../services/tutorial.service";
+import stickersService from "../services/stickers.service";
 import axios from "axios";
 
 export default class Dashboard extends React.Component {
@@ -9,7 +9,7 @@ export default class Dashboard extends React.Component {
     }
   
     componentDidMount() {
-      tutorialService.getAll().then(response => {
+      stickersService.getAll().then(response => {
         this.setState({ persons: response.data });
       });
     }

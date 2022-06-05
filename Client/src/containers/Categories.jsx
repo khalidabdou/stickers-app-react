@@ -5,17 +5,12 @@ import { Row, Col, Button, Nav, Modal } from 'react-bootstrap'
 
 
 class Categories extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
             open:false,
         }
     }
-    
-
-
     render() {
 
         return (

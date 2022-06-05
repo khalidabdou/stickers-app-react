@@ -1,7 +1,11 @@
 import http from "./http-common";
-class TutorialDataService {
-  getAll() {
-    return http.get("/test");
+class StickersDataService {
+  getAllCats() {
+    return http.get("/categories");
+  }
+  addCat(category) {
+    console.log(category);
+    return http.post(`/categories?cat=${category}`,);
   }
   get(id) {
     return http.get(`/tutorials/${id}`);
@@ -22,4 +26,4 @@ class TutorialDataService {
     return http.get(`/tutorials?title=${title}`);
   }
 }
-export default new TutorialDataService();
+export default new StickersDataService();

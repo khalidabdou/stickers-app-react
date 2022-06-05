@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var apiRouter = require('./routes/api');
 var stickersRouter = require('./routes/stickers');
 var categoriesRouter = require('./routes/categories');
 
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/stickers', stickersRouter);
 app.use('/categories', categoriesRouter);
-app.use("/api", testRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
