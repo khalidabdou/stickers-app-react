@@ -1,29 +1,37 @@
 import http from "./http-common";
+
+import axios from "axios";
 class StickersDataService {
-  getAllCats() {
+  getCategories() {
     return http.get("/categories");
   }
-  addCat(category) {
-    console.log(category);
-    return http.post(`/categories?cat=${category}`,);
+  addCat(category, file) {
+    console.log(category, file);
+    //return "success";
+    console.log(file);
+    return http.post(`/categories?cat=${category}&file=${file}`,);
   }
-  get(id) {
-    return http.get(`/tutorials/${id}`);
+
+  upload(formData) {
+    console.log(formData);
+    return http.post(`/categories/upload`, {
+      data: {
+        name: formData.get('name'),
+        fileName: formData.get('fileName'),
+        
+      }
+    }
+    );
   }
-  create(data) {
-    return http.post("/tutorials", data);
-  }
-  update(id, data) {
-    return http.put(`/tutorials/${id}`, data);
-  }
+
   delete(id) {
-    return http.delete(`/tutorials/${id}`);
+    return http.delete(`/categories/${id}`);
   }
-  deleteAll() {
-    return http.delete(`/tutorials`);
+
+  //get packs 
+  getStickers() {
+    return http.get("/stickers");
   }
-  findByTitle(title) {
-    return http.get(`/tutorials?title=${title}`);
-  }
+
 }
 export default new StickersDataService();

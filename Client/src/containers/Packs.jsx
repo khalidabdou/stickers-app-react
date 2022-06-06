@@ -2,8 +2,25 @@ import React, { Component } from "react";
 import Pack from "../components/Pack";
 import ModelAddPack from "../components/ModelAddPack";
 import { DropdownButton, Dropdown, Button,Nav } from 'react-bootstrap';
+import stickersService from "../services/stickers.service";
+
 
 class Packs extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            open:false,
+            packs: [],
+        }
+    }
+
+    componentDidMount() {
+        stickersService.getStickers().then(response => {
+            this.setState({ packs: response.data });
+        })
+    }
+
     render() {
         return (
             <div className="container">
@@ -21,13 +38,9 @@ class Packs extends Component {
                     <Dropdown.Item href="#/action-3">Add To Whatsapp</Dropdown.Item>
                 </DropdownButton>
                 </Nav>
-                
+                {this.state.packs.map(pack => ( 
+                    <Pack key={pack.id}  />))}
             
-                <Pack />
-                <Pack />
-                <Pack />
-                <Pack />
-                <Pack />
             </div>
         )
     }
