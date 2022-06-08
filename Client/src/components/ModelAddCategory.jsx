@@ -11,88 +11,53 @@ function DialogAddCat() {
 
   const [respo, setRespo] = useState('');
   const [category, setCategory] = useState('');
-  const [image, setImage] = useState('');
-  const [selectedFile, setSeletedFile] = useState(null);
   const [disabled, setDisabled] = useState(true);
+
+  const [file, setFile] = useState();
+  const [fileName, setFileName] = useState("");
 
 
   const handleChange = e => {
     setCategory(e.value);
-    
     if (e.value === "") {
       setDisabled(true);  
-    }else setDisabled(false);
-    
-  };
-  let handleChangeFile = e => {
-    var file = e.target.files[0];
-    console.log(file.name);
-    setImage(file.name);
+    }else setDisabled(false);  
   };
 
-  function addCat() {
 
-    stickersService.addCat({ category, image }).then(response => {
-      setRespo(response.data);
-      setCategory('');
-      setImage('');
-      const formData = new FormData();
-      // Update the formData object 
-      formData.append(
-        "fileuplaod",
-        selectedFile,
-        selectedFile.name
-      );
-      console.log(response.data, formData);
-    })
-  }
-  function onFileChange(event) {
-    // Update the state 
-
-    setSeletedFile(event.target.files[0]);
-    //this.setState({ selectedFile: event.target.files[0] }); 
+  const saveFile = (e) => {
+    setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
   };
+
+
 
   function onFileUpload() {
-    // Create an object of formData 
     const formData = new FormData();
-
-    // Update the formData object 
-    formData.append("file", selectedFile);
-    formData.append("fileName", selectedFile.name);
-    formData.append("name", category);
-    console.log(formData.get("fileName"));
+    formData.append("file", file);
+    formData.append("fileName", fileName);
+    formData.append('category', category);
     stickersService.upload(formData).then(response => {
       console.log(response);
       setCategory('')
-      setSeletedFile(null)
-   
-      setDisabled(true);  
-      
+     
+      setDisabled(true);      
       setRespo(response.data)
     })
 
-
-
-    // Details of the uploaded file 
-    //stickersService.upload(formData)
-
-    // Request made to the backend api 
-    // Send formData object 
-    //axios.post("upload", formData); 
   };
 
   function fileData() {
-    if (selectedFile) {
+    if (file) {
 
       return (
         <div>
           <h2>File Details:</h2>
-          <p>File Name: {selectedFile.name}</p>
-          <p>File Type: {selectedFile.type}</p>
+          <p>File Name: {file.name}</p>
+          <p>File Type: {file.type}</p>
           <p>
             Last Modified:{" "}
-            {selectedFile.lastModifiedDate.toDateString()}
+            {file.lastModifiedDate.toDateString()}
           </p>
         </div>
       );
@@ -106,11 +71,9 @@ function DialogAddCat() {
     }
   };
 
-  function alter() {
+  function alert() {
       return <Alert key='0' variant='success'>{respo}</Alert>
   }
-
- 
 
 
   return (
@@ -127,23 +90,25 @@ function DialogAddCat() {
         <Form className='p-4'>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Category Name</Form.Label>
-            <Form.Control type="text" placeholder="Name" value={category} onChange={event => handleChange(event.target)} />
+            <Form.Control type="text" required placeholder="Name" value={category} onChange={event => handleChange(event.target)} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Image</Form.Label>
-            <Form.Control type="File" maxLength={9} required accept='image/*' onChange={e => onFileChange(e)} />
+            <Form.Control type="file" maxLength={9} required accept='image/*' onChange={saveFile} />
           </Form.Group>
-          {alter()}
+          {alert()}
           {fileData()}
+
+          <Button type='button' variant="primary" disabled={disabled} onClick={onFileUpload}>
+            Save Changes
+          </Button>
         </Form>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" disabled={disabled} onClick={onFileUpload}>
-            Save Changes
-          </Button>
+          
         </Modal.Footer>
 
       </Modal>

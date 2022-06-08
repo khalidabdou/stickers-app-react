@@ -3,15 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Packs from './containers/Packs';
-import Dashboard from './containers/Dashboard';
+import { CookiesProvider } from "react-cookie";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <CookiesProvider>
     <App />
-  </React.StrictMode>
+  </CookiesProvider>
 );
 
 reportWebVitals();

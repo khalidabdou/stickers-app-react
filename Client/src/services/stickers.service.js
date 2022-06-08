@@ -13,24 +13,50 @@ class StickersDataService {
   }
 
   upload(formData) {
-    console.log(formData);
-    return http.post(`/categories/upload`, {
-      data: {
-        name: formData.get('name'),
-        fileName: formData.get('fileName'),
-        
-      }
-    }
-    );
+    console.log(formData.data);
+    return http.post(`/categories/upload`, formData , { 
+      data:{name: formData.name,},
+      headers : {'Content-Type': 'multipart/form-data'}});
   }
+  // {
+  //   data: {
+  //     name: formData.get('name'),
+  //     fileName: formData.get('fileName'),
+  //     formData: formData       
+  //   }
+  // }
 
   delete(id) {
     return http.delete(`/categories/${id}`);
   }
 
+  uploadStikcers(formData){
+    return http.post("/stickers/",formData,{data:formData.name,
+      headers:{
+        'Content-Type': 'multipart/form-data'
+    }});
+  }
+
   //get packs 
   getStickers() {
     return http.get("/stickers");
+  }
+
+  //add pack
+  addPack() {
+  
+    //return "success";
+    return http.post(`/stickers`,);
+  }
+
+  //delete pack
+  deletePack(id) {
+    return http.delete(`/stickers/${id}`);
+  } 
+
+  //get languages
+  getLanguages() {
+    return http.get("/languages");
   }
 
 }

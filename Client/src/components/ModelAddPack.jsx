@@ -1,55 +1,88 @@
-import { Row, Col, Button, Nav, Modal, Form, DropdownButton, Dropdown } from 'react-bootstrap'
+import { Row, Col, Button, Nav, Modal, Form, Alert } from 'react-bootstrap'
 import React, { Component, useState } from 'react';
+import stickersService from '../services/stickers.service';
 
 
-function ModelAddPack() {
+function ModelAddPack(props) {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [respo, setRespo] = useState('');
+
+  const [file, setFile] = useState();
+  const [packName, setPackName] = useState("")
+  const [disabled, setDisabled] = useState(true);
+
+  const handleChangePackName = e => {
+    setPackName(e.value);
+    console.log(packName);
+    if (e.value === "") {
+      setDisabled(true);
+    } else setDisabled(false);
+  };
+
+  function addPack() {
+     const formData = new FormData();
+     let stickers = [];
+
+    for (let i = 0; i < file.length; i++) {
+      //console.log(file[i]);
+      formData.append(`file`, file[i])
+    }
+
+    //formData.append("file", file);
+    formData.append('packName', packName);
+    formData.append('categoryId', props.category.id);
+    stickersService.uploadStikcers(formData).then(response => {
+      setRespo(response.data);
+      setPackName('');
+    })
+  }
+
+  const saveFile = (e) => {
+
+
+    setFile(e.target.files);
+    console.log('file changed');
+  };
+
+  function alert() {
+    return <Alert key='0' variant='success'>{respo}</Alert>
+  }
+
+
 
   return (
     <>
       <Button variant="primary" className='me-2' onClick={handleShow}>
-        Add Category
+        Add Pack
       </Button>
-
       <Modal show={show} onHide={handleClose} >
-
         <Modal.Header closeButton>
           <Modal.Title>Add Category</Modal.Title>
         </Modal.Header>
         <Form className='p-4'>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Pack Name</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" />
+            <Form.Control type="text" placeholder="Enter pack name" onChange={ e =>handleChangePackName(e.target)} />
           </Form.Group>
-
           <Form.Group className="mb-3" controlId="">
-          <Form.Label>Category</Form.Label>
-          <select className="form-select" aria-label="Default select example">
-            <option selected="">Category</option>
-            <option value={1}>One</option>
-            <option value={2}>Two</option>
-            <option value={3}>Three</option>
-          </select>
+            <Form.Label>category {props.category.id}</Form.Label>
+            <Form.Control type="email" placeholder="Enter pack name" disabled value={props.category.name}  />
           </Form.Group>
-
 
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Stickers</Form.Label>
-            <Form.Control type="File" />
+            <Form.Control type="File" accept='image/webp' multiple onChange={saveFile} />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+          {alert()}
         </Form>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" disabled={disabled} onClick={addPack}>
             Save Changes
           </Button>
         </Modal.Footer>
