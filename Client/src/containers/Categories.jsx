@@ -3,8 +3,8 @@ import Category from '../components/Category';
 import ModelAddCategory from '../components/ModelAddCategory';
 import { Row, Col, Toast, Nav, Modal } from 'react-bootstrap';
 import stickersService from "../services/stickers.service";
-
-
+import Cookies from 'universal-cookie';
+let cookies
 
 class Categories extends Component {
     constructor(props) {
@@ -15,9 +15,12 @@ class Categories extends Component {
             categories: [],
             respo: "",
         }
+        cookies = new Cookies();
     }
 
     componentDidMount() {
+        
+        
         stickersService.getCategories().then(response => {
             this.setState({ categories: response.data });
         })
@@ -26,7 +29,7 @@ class Categories extends Component {
     //function delete category
     detele= id => {
         stickersService.delete(id).then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             const newList = this.state.categories.filter((item) => item.id !== id);
             this.setState({ respo:response.data });
             this.show(true);
@@ -54,6 +57,7 @@ class Categories extends Component {
     render() {
         return (
             <div className='container'>
+                
                 <Nav className="nav justify-content-end m-2 text-success"
                     activeKey="/home"
                     onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
@@ -64,18 +68,11 @@ class Categories extends Component {
                 </Nav>
                 <Row className=''>
                     {this.state.categories.map(category => (   
-                        <Col key={category._id} xs> 
+                        <Col style={{ width: '18rem' }} align="center" className=' m-2'  key={category._id} xs> 
                             <Category category={category} delete ={this.detele} />
                         </Col>
                     ))}
-                    {/* <Col xs ><Category /></Col>
-                    <Col xs><Category /></Col>
-                    <Col xs><Category /></Col>
-                    <Col xs><Category /></Col>
-                    <Col xs><Category /></Col>
-                    <Col xs><Category /></Col>
-                    <Col xs><Category /></Col>
-                    <Col xs><Category /></Col> */}
+                    
                 </Row>
 
                 {this.showToast()}

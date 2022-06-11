@@ -13,7 +13,7 @@ model pack_stickers {
   name                    String   @db.Text
   animated_sticker_pack   Boolean? @default(false)
   android_play_store_link String   @db.Text @default("")
-  stickers                String   @db.Text @default("")
+  stickers                String   @db.Text
   count_set_to_whatsapp   Int?     @default(0)
   count_views             Int?     @default(10)
   folder                  String   @db.Text @default("")
