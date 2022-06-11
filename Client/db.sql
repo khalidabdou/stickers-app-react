@@ -51,6 +51,7 @@ INSERT INTO
     `dispo`
   )
 VALUES
+  (1, 'all', 'all', 'all', 'all.png', 0),
   (2, 'العربية', 'arabic', 'ar', 'arabia.png', 0),
   (3, 'English', 'english', 'en', 'english.png', 0),
   (4, 'Italiana', 'Italian', 'it', 'italy.png', 1),
@@ -92,7 +93,6 @@ CREATE TABLE if not exists pack_stickers (
   `stickers` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `count_set_to_whatsapp` int(11) DEFAULT 0,
   `count_views` int(11) DEFAULT 10,
-  `language_app` int(11) default -1,
   `folder` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   FOREIGN KEY(`cid`) REFERENCES `tbl_cat`(`id`) on delete cascade
 );

@@ -5,6 +5,7 @@ import Packs from './containers/Packs';
 import Dashboard from './containers/Dashboard';
 import Categories from './containers/Categories';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 
 
 function App() {

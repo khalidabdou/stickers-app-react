@@ -1,29 +1,63 @@
 import http from "./http-common";
+
+import axios from "axios";
 class StickersDataService {
-  getAllCats() {
+  getCategories() {
     return http.get("/categories");
   }
-  addCat(category) {
-    console.log(category);
-    return http.post(`/categories?cat=${category}`,);
+  addCat(category, file) {
+    console.log(category, file);
+    //return "success";
+    console.log(file);
+    return http.post(`/categories?cat=${category}&file=${file}`,);
   }
-  get(id) {
-    return http.get(`/tutorials/${id}`);
+
+  upload(formData) {
+    console.log(formData.data);
+    return http.post(`/categories/upload`, formData , { 
+      data:{name: formData.name,},
+      headers : {'Content-Type': 'multipart/form-data'}});
   }
-  create(data) {
-    return http.post("/tutorials", data);
-  }
-  update(id, data) {
-    return http.put(`/tutorials/${id}`, data);
-  }
+  // {
+  //   data: {
+  //     name: formData.get('name'),
+  //     fileName: formData.get('fileName'),
+  //     formData: formData       
+  //   }
+  // }
+
   delete(id) {
-    return http.delete(`/tutorials/${id}`);
+    return http.delete(`/categories/${id}`);
   }
-  deleteAll() {
-    return http.delete(`/tutorials`);
+
+  uploadStikcers(formData){
+    return http.post("/stickers/",formData,{data:formData.name,
+      headers:{
+        'Content-Type': 'multipart/form-data'
+    }});
   }
-  findByTitle(title) {
-    return http.get(`/tutorials?title=${title}`);
+
+  //get packs 
+  getStickers() {
+    return http.get("/stickers");
   }
+
+  //add pack
+  addPack() {
+  
+    //return "success";
+    return http.post(`/stickers`,);
+  }
+
+  //delete pack
+  deletePack(id) {
+    return http.delete(`/stickers/${id}`);
+  } 
+
+  //get languages
+  getLanguages() {
+    return http.get("/languages");
+  }
+
 }
 export default new StickersDataService();

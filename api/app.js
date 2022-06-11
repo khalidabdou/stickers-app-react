@@ -3,11 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const fileUpload = require('express-fileupload');
+
+
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var stickersRouter = require('./routes/stickers');
 var categoriesRouter = require('./routes/categories');
+var languagesRouter = require('./routes/languages');
 
 var app = express();
 
@@ -21,15 +28,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(morgan('dev'));
+// enable files upload
+app.use(fileUpload({
+  createParentPath: true
+}));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();
 });
+
+
+
+
 app.use('/', indexRouter);
 app.use('/stickers', stickersRouter);
 app.use('/categories', categoriesRouter);
 app.use("/api", apiRouter);
+app.use("/languages", languagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
