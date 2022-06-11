@@ -10,6 +10,7 @@ function ModelAddPack(props) {
   const [respo, setRespo] = useState('');
 
   const [file, setFile] = useState();
+  const [tray, settray] = useState();
   const [packName, setPackName] = useState("")
   const [disabled, setDisabled] = useState(true);
 
@@ -26,9 +27,11 @@ function ModelAddPack(props) {
      let stickers = [];
 
     for (let i = 0; i < file.length; i++) {
-      //console.log(file[i]);
+     
       formData.append(`file`, file[i])
     }
+
+    formData.append(`tray`, tray);
 
     //formData.append("file", file);
     formData.append('packName', packName);
@@ -40,17 +43,17 @@ function ModelAddPack(props) {
   }
 
   const saveFile = (e) => {
-
-
     setFile(e.target.files);
-    console.log('file changed');
   };
+
+  const trayImage = (e) => {
+    console.log(e.target.files[0]);
+    settray(e.target.files[0]);
+  }
 
   function alert() {
     return <Alert key='0' variant='success'>{respo}</Alert>
   }
-
-
 
   return (
     <>
@@ -71,9 +74,15 @@ function ModelAddPack(props) {
             <Form.Control type="email" placeholder="Enter pack name" disabled value={props.category.name}  />
           </Form.Group>
 
+
+          <Form.Group className="mb-3" controlId="">
+            <Form.Label>Tray image </Form.Label>
+            <Form.Control type="File" accept='image/png' required onChange={trayImage} />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="">
             <Form.Label>Stickers</Form.Label>
-            <Form.Control type="File" accept='image/webp' multiple onChange={saveFile} />
+            <Form.Control type="File" accept='image/webp' required multiple onChange={saveFile} />
           </Form.Group>
 
           {alert()}
@@ -82,11 +91,10 @@ function ModelAddPack(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" disabled={disabled} onClick={addPack}>
+          <Button type='submit' variant="primary" disabled={disabled} onClick={addPack}>
             Save Changes
           </Button>
-        </Modal.Footer>
-
+        </Modal.Footer> 
       </Modal>
     </>
   );

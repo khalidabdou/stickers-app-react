@@ -3,37 +3,47 @@ var router = express.Router();
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'client/public/images');
-    },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString() + file.originalname);
+
+
+
+
+
+
+router.get('/all', async function (req, res) {
+    //get params
+
+    let language = parseInt(req.query.language);
+
+    if (language != 1) {
+        language = { language_app: language }
+    } else {
+        language = {}
     }
-})
-const uploadImage = multer({ storage: storage })
+    console.log(language);
+    let catetories = await prisma.tbl_cat.findMany({
+        where: language,
+        include: {
+            _count: {
+                select: {
+                    pack_stickers: true,
+                }
+            }
 
+        }
 
-
-router.get('/', async function (req, res) {
-    let catetories = await prisma.tbl_cat.findMany({})
-    //console.log(catetories);
+    })
+    console.log(catetories);
     res.json(catetories)
+})
 
-});
-
-//add category post
-router.post('/', async function (req, res) {
-
-});
 
 router.post("/upload", async (req, res) => {
-    let success=''
+    let success = ''
     let name = req.body.category
-    console.log(req.body);
+    let language = parseInt(req.body.language)
 
-    if(!name){
+
+    if (!name) {
         success = "Please enter category name"
         return res.json(success)
     }
@@ -47,7 +57,7 @@ router.post("/upload", async (req, res) => {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let image = req.files.file;
             //Use the mv() method to place the file in upload directory (i.e. "uploads")
-            await image.mv('./uploads/' + image.name);  
+            await image.mv('./uploads/categories/' + image.name);
             success = image.name
         }
     } catch (err) {
@@ -58,7 +68,7 @@ router.post("/upload", async (req, res) => {
         data: {
             name: name,
             image: success,
-            language_app: 1,
+            language_app: language,
         }
     })
     console.log(cat)

@@ -1,43 +1,60 @@
 import React, { Component } from 'react';
 import stickersService from '../services/stickers.service';
-import { withCookies, Cookies } from 'react-cookie';
-import { instanceOf } from 'prop-types';
-
-
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav, Dropdown, Button, Form } from 'react-bootstrap';
-class NavBar extends Component {
-   
+import Cookies from 'universal-cookie';
 
+let cookies
+class NavBar extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
-        const { cookies } = props;
         this.state = {
             languages: [],
-            //name: cookies.get('name') || 'Ben'
 
         }
+        cookies = new Cookies();
     }
-    handleNameChange(name) {
-        const { cookies } = this.props;
 
-        cookies.set('name', name, { path: '/' });
-        this.setState({ name });
-        console.log(name);
+
+    logout() {
+
+        cookies.set('login', false, { path: '/' });
+        window.location.reload(false);
+
     }
+
 
 
     getLanguages() {
         stickersService.getLanguages()
             .then(response => {
-                this.setState({ languages: response.data });
+                const current = parseInt(cookies.get('language'))
+                //console.log(cookies.get('language'));
+                let langs = response.data
+                langs.forEach(lg => {
+                    if (lg.id === current) {
+                        lg.selected = 'selected'
+                        //console.log('selected');
+                    } else {
+                        //console.log(lg.selected);
+                        lg.selected = ''
+                    }
+                });
+                //console.log(langs);
+                this.setState({ languages: langs });
             })
             .catch(error => {
                 console.log(error);
             })
+    }
+
+    changeLanguage(id) {
+        //console.log("change language  " + id.target.value);
+        cookies.set('language', id.target.value, { path: '/' });
+        window.location.reload(false);
+
     }
 
     componentDidMount() {
@@ -47,9 +64,9 @@ class NavBar extends Component {
     render() {
         return (
             <Nav className="navbar navbar-expand-lg navbar-light bg-dark justify-content-center text-success">
-                <Nav.Item className=''>
+                {/* <Nav.Item className=''>
                     <Nav.Link href="/dashboard" className='text-white' >Dashboard</Nav.Link>
-                </Nav.Item>
+                </Nav.Item> */}
                 <Nav.Item>
                     <Nav.Link href="/categories" className='text-white' >Categories</Nav.Link>
                 </Nav.Item>
@@ -57,17 +74,22 @@ class NavBar extends Component {
                     <Nav.Link href='/packs' className='text-white' >Stickers</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Form.Select aria-label="Default select example">
+                    <Form.Select aria-label="Default select example" onChange={this.changeLanguage}>
                         {this.state.languages.map(language => (
-                            <option key={language.id} value={language.id} onChange=''>{language.name}</option>
+                            <option key={language.id} value={language.id} selected={language.selected} >{language.name}</option>
                         ))}
                     </Form.Select>
 
                 </Nav.Item>
 
                 <Nav.Item className='m-4 nav navbar-nav navbar-right'>
-                    <Button variant="outline-danger" >Log out</Button>{' '}
+                    <Button variant="outline-danger" onClick={this.logout}>Log out</Button>
+
                 </Nav.Item>
+                <Nav.Item>
+
+                </Nav.Item>
+
             </Nav>
         )
     }

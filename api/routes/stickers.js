@@ -11,45 +11,32 @@ router.get('/', async (req, res,) => {
   let packs = await prisma.pack_stickers.findMany({})
   //console.log(packs);
   res.json(packs)
-
 });
 
 //add pack
 router.post('/', async function (req, res) {
-  
 
   const id = parseInt(req.body.categoryId)
   const packName = req.body.packName
   const stickers = req.files.file
+  const tray = req.files.tray
   let success = 'success'
   let stickersString=''
-  let data = [];
   let folderName = ''
   
-
-  
   if (stickers) {
-
+    stickers.forEach(async sticker => {  
+      stickersString += sticker.name + ','
+    })
     try {
-      const folderName = Math.random().toString(36).substring(2,7);
+       folderName = Math.random().toString(36).substring(2,7);
+       await tray.mv(`./uploads/packs/${folderName}/tray.png`)
         //loop all files
        await stickers.forEach(async sticker => {  
-
-        
-          await sticker.mv('./uploads/'+folder+'/' + sticker.name);
-
-          //push file details
-          stickersString += sticker.name + ','
-          data.push({
-            name: sticker.name,
-            mimetype: sticker.mimetype,
-            size: sticker.size
-          });
+          await sticker.mv('./uploads/packs/'+folderName+'/' + sticker.name);
+          
         });
 
-  
-      
-      
     } catch (err) {
       console.log(err);
       success = 'error'
@@ -69,6 +56,7 @@ router.post('/', async function (req, res) {
       folder: folderName,
     }
   })
+  console.log(stickersString);
   if (responce.identifier) {
     res.json('success added pack : id ' + responce.identifier );
   } else {

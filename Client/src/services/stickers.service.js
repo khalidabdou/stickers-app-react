@@ -1,22 +1,21 @@
 import http from "./http-common";
 
-import axios from "axios";
+import Cookies from 'universal-cookie';
+let cookies =new Cookies();
 class StickersDataService {
   getCategories() {
-    return http.get("/categories");
+
+    return http.get("/categories/all",{ params: { language: cookies.get('language') } });
   }
   addCat(category, file) {
-    console.log(category, file);
-    //return "success";
-    console.log(file);
+    
     return http.post(`/categories?cat=${category}&file=${file}`,);
   }
 
   upload(formData) {
-    console.log(formData.data);
-    return http.post(`/categories/upload`, formData , { 
-      data:{name: formData.name,},
-      headers : {'Content-Type': 'multipart/form-data'}});
+    formData.append('language', cookies.get('language'));
+
+    return http.post(`/categories/upload`, formData);
   }
   // {
   //   data: {
@@ -30,11 +29,13 @@ class StickersDataService {
     return http.delete(`/categories/${id}`);
   }
 
-  uploadStikcers(formData){
-    return http.post("/stickers/",formData,{data:formData.name,
-      headers:{
+  uploadStikcers(formData) {
+    return http.post("/stickers/", formData, {
+      data: formData.name,
+      headers: {
         'Content-Type': 'multipart/form-data'
-    }});
+      }
+    });
   }
 
   //get packs 
@@ -44,7 +45,7 @@ class StickersDataService {
 
   //add pack
   addPack() {
-  
+
     //return "success";
     return http.post(`/stickers`,);
   }
@@ -52,11 +53,21 @@ class StickersDataService {
   //delete pack
   deletePack(id) {
     return http.delete(`/stickers/${id}`);
-  } 
+  }
 
   //get languages
   getLanguages() {
     return http.get("/languages");
+  }
+
+  login(username, password) {
+    //console.log(username + password);
+    return http.post("/login", {
+      username: username ,password: password  ,
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    });
   }
 
 }
