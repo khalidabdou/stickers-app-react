@@ -23,6 +23,12 @@ router.post('/login', function (req, res) {
     res.json('success')
 
 
+
+
+});
+
+router.get('/', function (req, res) {
+    res.send('Hello World!');
 });
 
 module.exports = router;
