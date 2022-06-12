@@ -12,11 +12,11 @@ model pack_stickers {
   cid                     Int
   name                    String   @db.Text
   animated_sticker_pack   Boolean? @default(false)
-  android_play_store_link String   @db.Text @default("")
-  stickers                String   @db.Text
+  android_play_store_link String   @default("") @db.Text
+  stickers                String   @default("") @db.Text
   count_set_to_whatsapp   Int?     @default(0)
   count_views             Int?     @default(10)
-  folder                  String   @db.Text @default("")
+  folder                  String   @default("") @db.Text
   tbl_cat                 tbl_cat  @relation(fields: [cid], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "pack_stickers_ibfk_1")
 
   @@index([cid], map: "cid")

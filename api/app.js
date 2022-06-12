@@ -104,9 +104,7 @@ app.get('/aa',(req,res)=>{
 })
 
 app.get('/login', (req, res) => {
-
   res.json(process.env.USERNAME)
-
 })
 
 module.exports = app;
