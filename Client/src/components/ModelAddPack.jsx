@@ -11,6 +11,7 @@ function ModelAddPack(props) {
 
   const [file, setFile] = useState();
   const [tray, settray] = useState();
+  const [animated, setAnimated] = useState(0);
   const [packName, setPackName] = useState("")
   const [disabled, setDisabled] = useState(true);
 
@@ -23,11 +24,11 @@ function ModelAddPack(props) {
   };
 
   function addPack() {
-     const formData = new FormData();
-     let stickers = [];
+    const formData = new FormData();
+    let stickers = [];
 
     for (let i = 0; i < file.length; i++) {
-     
+
       formData.append(`file`, file[i])
     }
 
@@ -36,6 +37,7 @@ function ModelAddPack(props) {
     //formData.append("file", file);
     formData.append('packName', packName);
     formData.append('categoryId', props.category.id);
+    formData.append('animated', animated);
     stickersService.uploadStikcers(formData).then(response => {
       setRespo(response.data);
       setPackName('');
@@ -49,6 +51,11 @@ function ModelAddPack(props) {
   const trayImage = (e) => {
     console.log(e.target.files[0]);
     settray(e.target.files[0]);
+  }
+
+  const animate = (e) => {
+    console.log(e.target.value);
+    setAnimated(e.target.value);
   }
 
   function alert() {
@@ -67,11 +74,11 @@ function ModelAddPack(props) {
         <Form className='p-4'>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Pack Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter pack name" onChange={ e =>handleChangePackName(e.target)} />
+            <Form.Control type="text" placeholder="Enter pack name" onChange={e => handleChangePackName(e.target)} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="">
             <Form.Label>category {props.category.id}</Form.Label>
-            <Form.Control type="email" placeholder="Enter pack name" disabled value={props.category.name}  />
+            <Form.Control type="email" placeholder="Enter pack name" disabled value={props.category.name} />
           </Form.Group>
 
 
@@ -84,7 +91,13 @@ function ModelAddPack(props) {
             <Form.Label>Stickers</Form.Label>
             <Form.Control type="File" accept='image/webp' required multiple onChange={saveFile} />
           </Form.Group>
-
+          <Form.Group className="mb-3" controlId="">
+          <Form.Label>is animated</Form.Label>
+            <Form.Select className='mb-3' aria-label="Default select example" onChange={animate}>
+              <option value="1">true</option>
+              <option value="0">false</option>
+            </Form.Select>
+          </Form.Group>
           {alert()}
         </Form>
         <Modal.Footer>
@@ -94,7 +107,7 @@ function ModelAddPack(props) {
           <Button type='submit' variant="primary" disabled={disabled} onClick={addPack}>
             Save Changes
           </Button>
-        </Modal.Footer> 
+        </Modal.Footer>
       </Modal>
     </>
   );

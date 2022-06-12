@@ -32,7 +32,7 @@ router.get('/all', async function (req, res) {
         }
 
     })
-    console.log(catetories);
+  
     res.json(catetories)
 })
 

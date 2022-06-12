@@ -19,6 +19,8 @@ router.post('/', async function (req, res) {
   const id = parseInt(req.body.categoryId)
   const packName = req.body.packName
   const stickers = req.files.file
+  let animated= req.body.animated
+  
   const tray = req.files.tray
   let success = 'success'
   let stickersString=''
@@ -48,15 +50,24 @@ router.post('/', async function (req, res) {
    return res.json('no files uploaded');
   }
 
+  console.log(animated);
+
+  if  (animated==="1"){
+    animated = true
+  }else {
+    animated=false
+  }
+
   let responce = await prisma.pack_stickers.create({
     data: {
       cid: id,
       name: packName,
       stickers: stickersString,
       folder: folderName,
+      animated_sticker_pack: animated
     }
   })
-  console.log(stickersString);
+  console.log(responce);
   if (responce.identifier) {
     res.json('success added pack : id ' + responce.identifier );
   } else {
