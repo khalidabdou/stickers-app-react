@@ -6,9 +6,6 @@ const prisma = new PrismaClient()
 
 
 
-
-
-
 router.get('/all', async function (req, res) {
     //get params
 
