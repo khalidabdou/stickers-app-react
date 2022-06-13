@@ -94,8 +94,9 @@ function ModelAddPack(props) {
           <Form.Group className="mb-3" controlId="">
           <Form.Label>is animated</Form.Label>
             <Form.Select className='mb-3' aria-label="Default select example" onChange={animate}>
-              <option value="1">true</option>
-              <option value="0">false</option>
+              <option value="" disabled selected>is Animated</option>
+              <option value="1">YES</option>
+              <option value="0">NO</option>
             </Form.Select>
           </Form.Group>
           {alert()}
