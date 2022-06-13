@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card,Button,FormCheck} from 'react-bootstrap'
 import ModelAddPack from '../components/ModelAddPack';
-import { API_CATEGORIES } from "./api";
+import { API_CATEGORIES } from "../services/api";
 
 class Category extends Component {
     
