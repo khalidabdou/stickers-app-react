@@ -5,6 +5,7 @@ import ModelAddPack from '../components/ModelAddPack';
 class Category extends Component {
     
     constructor(props) {
+        console.log(process.env);
         super(props);
         this.state = {
             category : this.props.category,
