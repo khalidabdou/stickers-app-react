@@ -17,6 +17,7 @@ model pack_stickers {
   count_set_to_whatsapp   Int?     @default(0)
   count_views             Int?     @default(10)
   folder                  String   @default("") @db.Text
+  enabled                 Boolean  @default(true)
   tbl_cat                 tbl_cat  @relation(fields: [cid], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "pack_stickers_ibfk_1")
 
   @@index([cid], map: "cid")
@@ -38,6 +39,7 @@ model tbl_cat {
   image         String          @db.VarChar(255)
   color         String?         @default("#ff8c00") @db.VarChar(255)
   language_app  Int?
+  enabled       Boolean         @default(true)
   tbl_language  tbl_language?   @relation(fields: [language_app], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "tbl_cat_ibfk_1")
   pack_stickers pack_stickers[]
 

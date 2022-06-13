@@ -22,6 +22,14 @@ class Pack extends Component {
             return <div>🔥 GIF</div>
         }
     }
+    isEnable = () => {
+        if (this.state.pack.enabled === true) {
+            return true
+        }else {
+            return false
+        }
+    }
+
     render() {
         return (
             <Card className='m-2' width='50%' >
@@ -37,7 +45,7 @@ class Pack extends Component {
 
                     </Card.Text>
                     <Button className='m-2' variant="outline-danger" onClick={() => this.props.delete(this.props.pack.identifier)}>Delete Pack</Button>
-                    <FormCheck type="checkbox" label="Enable" className='m-2 ' />
+                    <FormCheck type="checkbox" label="Enable" className='m-2 ' checked= { this.state.pack.enabled } />
                 </Card.Body>
             </Card>
         )
