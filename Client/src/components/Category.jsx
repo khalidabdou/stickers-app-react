@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {Card,Button,FormCheck} from 'react-bootstrap'
 import ModelAddPack from '../components/ModelAddPack';
+import env from 'react-dotenv';
 
 class Category extends Component {
     
     constructor(props) {
-        console.log(process.env);
+        
         super(props);
         this.state = {
             category : this.props.category,
@@ -16,7 +17,7 @@ class Category extends Component {
         return (
             <div>
                 <Card className='m-2 p-4 align-items-center ' style={{ width: '18rem' }} >
-                    <Card.Img variant="top" src={'http://localhost:9000/categories/'+this.props.category.image} />
+                    <Card.Img variant="top" src={env.API + '/categories/'+this.props.category.image} />
                     <Card.Body>
                         <Card.Title>{this.state.category.name}  </Card.Title>
                         <Card.Text>
