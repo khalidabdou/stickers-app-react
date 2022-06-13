@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Card, Button, Image } from 'react-bootstrap'
+import { Card, Button, Image ,FormCheck} from 'react-bootstrap'
 
 
 class Pack extends Component {
@@ -38,7 +38,7 @@ class Pack extends Component {
 
                     </Card.Text>
                     <Button className='m-2' variant="outline-danger" onClick={() => this.props.delete(this.props.pack.identifier)}>Delete Pack</Button>
-
+                    <FormCheck type="checkbox" label="Enable" className='m-2 ' />
                 </Card.Body>
             </Card>
         )
