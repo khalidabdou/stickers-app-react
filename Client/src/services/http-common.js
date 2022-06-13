@@ -1,10 +1,11 @@
 import axios from "axios";
+import env from "react-dotenv";
 
 export default axios.create({
-  baseURL: process.env.API || "http://localhost:9000",
+  baseURL: env.API ,
   headers: {
     'Content-Type': 'application/json',
     'Content-Type': 'multipart/form-data',
-    
+  
   }
 });
