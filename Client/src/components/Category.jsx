@@ -17,7 +17,7 @@ class Category extends Component {
         return (
             <div>
                 <Card className='m-2 p-4 align-items-center ' style={{ width: '18rem' }} >
-                    <Card.Img variant="top" src={env.API + '/categories/'+this.props.category.image} />
+                    <Card.Img variant="top" src={env.REACT_APP_API  + '/categories/'+this.props.category.image} />
                     <Card.Body>
                         <Card.Title>{this.state.category.name}  </Card.Title>
                         <Card.Text>
