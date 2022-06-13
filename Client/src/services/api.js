@@ -1,5 +1,5 @@
 const API='http://77.243.85.134:9000'
-const API_STICKERS= API+'/stickers/'
+const API_STICKERS= API+'/packs/'
 const API_LANGUAGES= API+'/languages'
 const API_CATEGORIES= API+'/categories/'
 

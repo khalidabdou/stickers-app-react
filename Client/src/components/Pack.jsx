@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-
-import { Card, Button, Image ,FormCheck} from 'react-bootstrap'
-
+import { Card, Button, Image ,FormCheck} from 'react-bootstrap';
+import { API_STICKERS } from "../services/api";
 
 class Pack extends Component {
     constructor(props) {
@@ -32,7 +31,7 @@ class Pack extends Component {
                     </Card.Title>
                     <Card.Text className='m-1'>
                         {this.state.stickers.map((item, index) => {
-                            return <Image key={index} src={'http://localhost:9000/packs/' + this.state.pack.folder + '/' + item} className='m-2' rounded width={70} height={70} />
+                            return <Image key={index} src={API_STICKERS + this.state.pack.folder + '/' + item} className='m-2' rounded width={70} height={70} />
                         }
                         )}
 
