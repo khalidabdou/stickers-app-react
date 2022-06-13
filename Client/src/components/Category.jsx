@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Card,Button,FormCheck} from 'react-bootstrap'
 import ModelAddPack from '../components/ModelAddPack';
+import ModelAddPackScrap from '../components/ModelAddPackScrap';
 import { API_CATEGORIES } from "../services/api";
 
 class Category extends Component {
@@ -24,6 +25,7 @@ class Category extends Component {
                             Stickers : {this.props.category._count.pack_stickers} | id : {this.props.category.id}
                         </Card.Text>
                         <ModelAddPack category={this.state.category}/>
+                        <ModelAddPackScrap category={this.state.category}/>
                         <Button variant="outline-danger" onClick={()=>this.props.delete(this.props.category.id)}>Delete</Button>
                         <FormCheck type="checkbox" label="Enable" className='m-2' />
                     </Card.Body>

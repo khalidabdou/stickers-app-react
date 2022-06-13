@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Button, Image ,FormCheck} from 'react-bootstrap';
 import { API_STICKERS } from "../services/api";
+import stickersService from '../services/stickers.service';
 
 class Pack extends Component {
     constructor(props) {
@@ -8,7 +9,8 @@ class Pack extends Component {
         this.state = {
             delete: this.props.delete,
             pack: this.props.pack,
-            stickers: ['05.webp', '06.webp', '07.webp'],
+            stickers: [],
+            enabled: this.props.pack.enabled
         }
     }
     componentDidMount() {
@@ -30,6 +32,22 @@ class Pack extends Component {
         }
     }
 
+    setEnable = (checked) => {
+    
+ 
+        this.setState({enabled:  checked.target.checked})
+        const responce=stickersService.setEnablePack(this.state.pack.identifier,checked.target.checked)
+        responce.then(res => {
+            console.log(res)
+            this.setState({enabled:  res.data.enabled})
+        }
+        ).catch(err => {
+            console.log(err)
+        }
+        )
+    }
+
+
     render() {
         return (
             <Card className='m-2' width='50%' >
@@ -45,7 +63,7 @@ class Pack extends Component {
 
                     </Card.Text>
                     <Button className='m-2' variant="outline-danger" onClick={() => this.props.delete(this.props.pack.identifier)}>Delete Pack</Button>
-                    <FormCheck type="checkbox" label="Enable" className='m-2 ' checked= { this.state.pack.enabled } />
+                    <FormCheck type="checkbox" label="Enable" className='m-2 ' checked= { this.state.enabled } onChange={this.setEnable}/>
                 </Card.Body>
             </Card>
         )
