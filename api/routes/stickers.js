@@ -306,7 +306,7 @@ async function convertAllToWebp(dir, index, res, packProp) {
 
   sharp(dir + '/' + stickersArray[index])
     .rotate()
-    .resize(521, 521)
+    .resize(512, 512)
     .toFile(dir + '/' + stickersArray[index].replace('.png', '.webp'), (err, info) => {
       //console.log(err, info);
     })
