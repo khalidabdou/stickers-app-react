@@ -10,8 +10,10 @@ var url = require("url");
 var path = require('path');
 var https = require('https');
 var sizeOf = require('image-size');
+const sharp = require('sharp');
 
 var index = 0;
+var indexConvert = 0;
 let stickersDir = [];
 let stickersArray = []
 
@@ -147,7 +149,29 @@ router.put('/:id', async function (req, res) {
 
 });
 
+
+router.get('/sharp', async function (req, res) {
+  sharp('./uploads/packs/tray.png')
+    .rotate()
+    .resize(521, 521)
+    .toFile('./uploads/packs/tray.webp', (err, info) => {
+      console.log(err, info);
+    })
+    .toBuffer()
+    .then(data => {
+      return res.json('success')
+    })
+    .catch(err => {
+      return res.json(err)
+    });
+
+})
+
 router.post('/scrap', (req, res) => {
+  index = 0;
+  indexConvert = 0;
+  stickersDir = [];
+  stickersArray = []
   let sticker_url = req.body.sticker_url
   let id = parseInt(req.body.categoryId)
   let packName = req.body.packName
@@ -193,98 +217,13 @@ router.post('/scrap', (req, res) => {
 
 
 async function uploadToFloder(res, stickers, packProp) {
-  const pack=packProp
+  const pack = packProp
   stickersDir = stickers
   var dir = './uploads/packs/' + packProp.folderName;
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
-  
-  //upload stickers from url
-  // await stickers.forEach(async element => {
-  //   var parsed = url.parse(element);
-  //   element = element.split('?').slice(0, -1).join('?')
-  //   const file = await fs.createWriteStream(dir + '/' + path.basename(parsed.pathname));
-  //   const request = await https.get(element, function (response) {
-  //     response.pipe(file);
-  //     file.on("finish", () => {
-  //       file.close();
-  //       console.log("Download Completed");
-  //     });
-  //   });
-  // });
-
-  //upload stickers from url
-  uplaod(dir, index,res,pack)
-  //return res.json('success')
-  //upload tray image from url
-  //var parsed_tray_image = url.parse(tray_image_file);
-  // const file = fs.createWriteStream(dir + '/tray.png');
-  // const request = await https.get(tray_image_file, function (response) {
-  //   response.pipe(file);
-  //   file.on("finish", () => {
-  //     file.close();
-  //     console.log("Download Completed");
-  //   });
-  // });
-  //console.log(file);
-
-
-  //await sleep(5000);
-
-  //convert all png to webp
-  // if (fs.existsSync(dir)) {
-  //   var stickersArray = []
-  //   stickers.forEach(async element => {
-  //     element = element.split('?').slice(0, -1).join('?')
-  //     var parsed = url.parse(element);
-  //     if (parsed.pathname.endsWith('.webp')) {
-  //       var stick = path.basename(parsed.pathname)
-  //       stickersArray.push(stick)
-  //       return
-  //     }
-  //     var stick = path.basename(parsed.pathname).replace(".png", ".webp")
-  //     //stick = stick.replace(".gif", ".webp")
-
-  //     var dimensions = sizeOf(dir + '/' + path.basename(parsed.pathname));
-  //     let isSticker = stick.startsWith("sticker")
-  //     if (dimensions.width == 512 && dimensions.height == 512 && isSticker) {
-  //       const result = webp.cwebp(
-  //         dir + '/' + path.basename(parsed.pathname),
-  //         dir + '/' + stick,
-  //         "-q 80",
-  //         logging = "-v");
-  //       stickersArray.push(stick)
-  //       result.then((response) => {
-  //         //   fs.unlink(dir + '/' + path.basename(parsed.pathname), function (err) {
-  //         //     if (err) throw err;
-  //         //     // if no error, file has been deleted successfully
-  //         //     console.log('File deleted!');
-  //         // });
-  //       });
-  //     }
-  //   })
-  // }
-
-  // const responce = await prisma.pack_stickers.create({
-  //   data: {
-  //     cid: packProp.cid,
-  //     name: packProp.name,
-  //     stickers: stickersArray.toString(),
-  //     folder: packProp.folderName,
-  //     animated_sticker_pack: true
-  //   }
-  // })
-
-  // //console.log(responce);
-  // if (responce.identifier) {
-  //   res.json('success added pack : id ' + responce.identifier);
-  // } else {
-  //   res.json('failed added pack ');
-  // }
-
-  //insert in database
-  //insertStickersData(res, name, false, stickersArray, folderNameGererated)
+  uplaod(dir, index, res, pack)
 
 }
 
@@ -302,12 +241,17 @@ function sleep(ms) {
   });
 }
 
-async function uplaod(dir, isLast,res,packProp) {
-  
+async function uplaod(dir, isLast, res, packProp) {
+
   const dirPack = dir
   var parsed = url.parse(stickersDir[isLast]);
   element = stickersDir[index].split('?').slice(0, -1).join('?')
-  stickersArray.push(path.basename(parsed.pathname))
+  const stick = path.basename(parsed.pathname)
+  if (stick.includes('sticker')) {
+    stickersArray.push(path.basename(parsed.pathname))
+    console.log(element);
+  }
+
   const file = await fs.createWriteStream(dir + '/' + path.basename(parsed.pathname));
   const request = await https.get(element, function (response) {
     response.pipe(file);
@@ -315,17 +259,22 @@ async function uplaod(dir, isLast,res,packProp) {
       file.close();
       console.log("Download Completed");
       if (isLast === stickersDir.length - 1) {
-        console.log('all done');
-        insertStickersData(res,packProp)
+        console.log('download done');
+        if (stickersArray[0].includes('.png')) {
+          convertAllToWebp(dir, 0, res, packProp)
+        } else
+          insertStickersData(res, packProp)
       } else {
         index++;
-        uplaod(dirPack, index,res,packProp)
+        uplaod(dirPack, index, res, packProp)
       }
     });
   });
 }
 
-async function insertStickersData(res,packProp){
+
+
+async function insertStickersData(res, packProp) {
   console.log(packProp);
   const responce = await prisma.pack_stickers.create({
     data: {
@@ -335,14 +284,52 @@ async function insertStickersData(res,packProp){
       folder: packProp.folderName,
       animated_sticker_pack: true
     }
-  })
+  });
+
+
 
   //console.log(responce);
   if (responce.identifier) {
     res.json('success added pack : id ' + responce.identifier);
   } else {
-    res.json('failed added pack ');
+    res.json('error added pack ');
   }
+}
+
+
+async function convertAllToWebp(dir, index, res, packProp) {
+
+  //console.log(dir);
+  console.log(index);
+  console.log(stickersArray.length);
+  console.log(stickersArray[index]);
+
+  sharp(dir + '/' + stickersArray[index])
+    .rotate()
+    .resize(521, 521)
+    .toFile(dir + '/' + stickersArray[index].replace('.png', '.webp'), (err, info) => {
+      //console.log(err, info);
+    })
+    .toBuffer()
+    .then(data => {
+      if (index === stickersArray.length - 1) {
+        console.log('all done convert');
+        insertStickersData(res, packProp)
+      } else {
+        fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
+          if (err) {
+            console.error(err)
+          }
+        })
+
+        stickersArray[indexConvert] = stickersArray[indexConvert].replace('.png', '.webp')
+        indexConvert++;
+        convertAllToWebp(dir, indexConvert, res, packProp)
+      }
+    })
+    .catch(err => {
+      return res.json(err)
+    });
 }
 
 
