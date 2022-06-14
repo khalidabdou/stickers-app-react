@@ -47,29 +47,7 @@ function DialogAddCat() {
 
   };
 
-  function fileData() {
-    if (file) {
 
-      return (
-        <div>
-          <h2>File Details:</h2>
-          <p>File Name: {file.name}</p>
-          <p>File Type: {file.type}</p>
-          <p>
-            Last Modified:{" "}
-            {file.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
-    }
-  };
 
   function alert() {
       return <Alert key='0' variant='success'>{respo}</Alert>
@@ -98,7 +76,6 @@ function DialogAddCat() {
             <Form.Control type="file" maxLength={9} required accept='image/*' onChange={saveFile} />
           </Form.Group>
           {alert()}
-          {fileData()}
 
           <Button type='button' variant="primary" disabled={disabled} onClick={onFileUpload}>
             Save Changes
