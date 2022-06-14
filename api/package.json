@@ -17,6 +17,7 @@
     "http-errors": "~1.6.3",
     "image-size": "^1.0.1",
     "jade": "~1.11.0",
+    "js-file-download": "^0.4.12",
     "nodemon": "^2.0.16",
     "pm2": "^5.2.0",
     "prisma": "^3.14.0",

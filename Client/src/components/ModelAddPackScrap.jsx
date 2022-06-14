@@ -31,21 +31,18 @@ function ModelAddPack(props) {
   }
 
   function addPackScrap() {
-      const formData = new FormData();
-      formData.append('packName', packName);
-      formData.append('sticker_url', packUrl);
-      formData.append('categoryId', props.category.id);
-      formData.append('animated', animated);
-      stickersService.scrap(formData).then(response => {
-        setRespo(response.data);
-        setPackUrl('');
-      }
-      )
+    setRespo('wait for response');
+    const formData = new FormData();
+    formData.append('packName', packName);
+    formData.append('sticker_url', packUrl);
+    formData.append('categoryId', props.category.id);
+    formData.append('animated', animated);
+    stickersService.scrap(formData).then(response => {
+      setRespo(response.data);
+      setPackUrl('');
+    }
+    )
   }
-
-
-
-
 
   const animate = (e) => {
     console.log(e.target.value);
@@ -53,7 +50,20 @@ function ModelAddPack(props) {
   }
 
   function alert() {
-    return <Alert key='0' variant='success'>{respo}</Alert>
+    if (respo === "") {
+      return null;
+    }else if (respo === "wait for response") {
+    return <Alert key='0' variant='success' className='d-flex align-items-center'>{respo} 
+    <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+    </Alert>
+  }else if (respo === "success") {
+    return <Alert key='0' variant='success' className='d-flex align-items-center'>{respo}
+    </Alert>
+  }
+  else if (respo.includes("error")) {
+    return <Alert key='0' variant='danger' className='d-flex align-items-center'>{respo}
+    </Alert>
+  }
   }
 
   return (
