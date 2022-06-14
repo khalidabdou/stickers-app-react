@@ -21,7 +21,7 @@ class Packs extends Component {
 
     componentDidMount() {
         stickersService.getStickers().then(response => {
-            console.log(response.data);
+            
             this.setState({ packs: response.data });
         })
 
@@ -46,16 +46,18 @@ class Packs extends Component {
 
     //delete pack
     deletePack = (identifier) => {
-        alert('are you sure');
+        //alert('are you sure');
         stickersService.deletePack(identifier).then(response => {
             this.setState({ respo: response.data });
             this.show(true);
             const newList = this.state.packs.filter((item) => item.identifier !== identifier);
+            console.log(newList);
             this.setState({ packs: newList });
         });
 
     }
 
+   
     render() {
         return (
             <div className="container">
@@ -63,19 +65,15 @@ class Packs extends Component {
                     activeKey="/home"
                     onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
                 >
-                    <DropdownButton id="dropdown-basic-button" title="Order By" className="">
-                        <Dropdown.Item href="#/action-1">Views</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Likes</Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">Add To Whatsapp</Dropdown.Item>
+                    <DropdownButton id="dropdown-basic-button" title="Order By" className="" onChange=''>
+                        <Dropdown.Item disabled>Views</Dropdown.Item>
+                        <Dropdown.Item disabled>Likes</Dropdown.Item>
+                        <Dropdown.Item >Add To Whatsapp</Dropdown.Item>
                     </DropdownButton>
                 </Nav>
-
-
                 {this.state.packs.map(pack => (
                     <Pack key={pack.id} pack={pack} delete={this.deletePack} />))}
-
                 {this.showToast()}
-
             </div>
         )
     }

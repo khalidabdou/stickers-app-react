@@ -54,6 +54,16 @@ class StickersDataService {
   deletePack(id) {
     return http.delete(`/stickers/${id}`);
   }
+  setEnablePack(id, enable) {
+    console.log(id + enable);
+    return http.put(`/stickers/${id}`, { enable: enable });
+
+  }
+  //post to enpoit scrap req body  ,categoryId ,packName ,animated
+
+  scrap(reqBody) {
+    return http.post("/stickers/scrap", reqBody);
+  }
 
   //get languages
   getLanguages() {
@@ -69,6 +79,8 @@ class StickersDataService {
       }
     });
   }
+
+
 
 }
 export default new StickersDataService();

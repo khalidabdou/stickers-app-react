@@ -7,14 +7,20 @@
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.11",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-fileupload": "^1.4.0",
     "http-errors": "~1.6.3",
+    "image-size": "^1.0.1",
     "jade": "~1.11.0",
+    "js-file-download": "^0.4.12",
     "nodemon": "^2.0.16",
-    "prisma": "^3.14.0"
+    "pm2": "^5.2.0",
+    "prisma": "^3.14.0",
+    "webp-converter": "^2.3.3"
   }
 }

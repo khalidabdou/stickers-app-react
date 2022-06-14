@@ -1,10 +1,11 @@
 import axios from "axios";
+import { API } from "./api";
 
 export default axios.create({
-  baseURL: "http://localhost:9000",
+  baseURL: API ,
   headers: {
     'Content-Type': 'application/json',
     'Content-Type': 'multipart/form-data',
-    
+  
   }
 });

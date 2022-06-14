@@ -99,10 +99,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.get('/login', (req, res) => {
-  console.log('login');
-  res.json(process.env.USERNAME)
+app.get('/aa',(req,res)=>{
+  res.send("welcom to api")
+})
 
+app.get('/login', (req, res) => {
+  res.json(process.env.USERNAME)
 })
 
 module.exports = app;

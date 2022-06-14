@@ -9,8 +9,8 @@ function ModelAddPack(props) {
   const handleShow = () => setShow(true);
   const [respo, setRespo] = useState('');
 
-  const [file, setFile] = useState();
-  const [tray, settray] = useState();
+  const [packUrl, setPackUrl] = useState();
+
   const [animated, setAnimated] = useState(0);
   const [packName, setPackName] = useState("")
   const [disabled, setDisabled] = useState(true);
@@ -23,34 +23,25 @@ function ModelAddPack(props) {
     } else setDisabled(false);
   };
 
-  function addPack() {
-    const formData = new FormData();
-    let stickers = [];
-
-    for (let i = 0; i < file.length; i++) {
-
-      formData.append(`file`, file[i])
-    }
-
-    formData.append(`tray`, tray);
-
-    //formData.append("file", file);
-    formData.append('packName', packName);
-    formData.append('categoryId', props.category.id);
-    formData.append('animated', animated);
-    stickersService.uploadStikcers(formData).then(response => {
-      setRespo(response.data);
-      setPackName('');
-    })
+  const handleChangePackUrl = e => {
+    setPackUrl(e.value);
+    if (e.value === "") {
+      setDisabled(true);
+    } else setDisabled(false);
   }
 
-  const saveFile = (e) => {
-    setFile(e.target.files);
-  };
-
-  const trayImage = (e) => {
-    console.log(e.target.files[0]);
-    settray(e.target.files[0]);
+  function addPackScrap() {
+    setRespo('wait for response');
+    const formData = new FormData();
+    formData.append('packName', packName);
+    formData.append('sticker_url', packUrl);
+    formData.append('categoryId', props.category.id);
+    formData.append('animated', animated);
+    stickersService.scrap(formData).then(response => {
+      setRespo(response.data);
+      setPackUrl('');
+    }
+    )
   }
 
   const animate = (e) => {
@@ -59,13 +50,26 @@ function ModelAddPack(props) {
   }
 
   function alert() {
-    return <Alert key='0' variant='success'>{respo}</Alert>
+    if (respo === "") {
+      return null;
+    }else if (respo === "wait for response") {
+    return <Alert key='0' variant='success' className='d-flex align-items-center'>{respo} 
+    <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+    </Alert>
+  }else if (respo === "success") {
+    return <Alert key='0' variant='success' className='d-flex align-items-center'>{respo}
+    </Alert>
+  }
+  else if (respo.includes("error")) {
+    return <Alert key='0' variant='danger' className='d-flex align-items-center'>{respo}
+    </Alert>
+  }
   }
 
   return (
     <>
-      <Button variant="primary" className='me-2' onClick={handleShow}>
-        Add Pack
+      <Button variant="info" className='me-2' onClick={handleShow}>
+        Scrap
       </Button>
       <Modal show={show} onHide={handleClose} >
         <Modal.Header closeButton>
@@ -76,23 +80,19 @@ function ModelAddPack(props) {
             <Form.Label>Pack Name</Form.Label>
             <Form.Control type="text" placeholder="Enter pack name" onChange={e => handleChangePackName(e.target)} />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Pack url</Form.Label>
+            <Form.Control type="text" placeholder="Enter pack url" onChange={e => handleChangePackUrl(e.target)} />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="">
             <Form.Label>category {props.category.id}</Form.Label>
             <Form.Control type="email" placeholder="Enter pack name" disabled value={props.category.name} />
           </Form.Group>
 
 
-          <Form.Group className="mb-3" controlId="">
-            <Form.Label>Tray image </Form.Label>
-            <Form.Control type="File" accept='image/png' required onChange={trayImage} />
-          </Form.Group>
 
           <Form.Group className="mb-3" controlId="">
-            <Form.Label>Stickers</Form.Label>
-            <Form.Control type="File" accept='image/webp' required multiple onChange={saveFile} />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="">
-          <Form.Label>is animated</Form.Label>
+            <Form.Label>is animated</Form.Label>
             <Form.Select className='mb-3' aria-label="Default select example" onChange={animate}>
               <option value="" disabled selected>is Animated</option>
               <option value="1">YES</option>
@@ -105,7 +105,7 @@ function ModelAddPack(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button type='submit' variant="primary" disabled={disabled} onClick={addPack}>
+          <Button type='submit' variant="primary" disabled={disabled} onClick={addPackScrap}>
             Save Changes
           </Button>
         </Modal.Footer>
