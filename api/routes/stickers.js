@@ -11,6 +11,7 @@ var path = require('path');
 var https = require('https');
 var sizeOf = require('image-size');
 const sharp = require('sharp');
+let animated = false
 
 
 
@@ -68,7 +69,7 @@ router.post('/', async function (req, res) {
     return res.json('no files uploaded');
   }
 
-  console.log(animated);
+
 
   if (animated === "1") {
     animated = true
@@ -265,11 +266,7 @@ async function uplaod(dir, isLast, res, packProp) {
   const file = await fs.createWriteStream(dir + '/' + path.basename(parsed.pathname));
   const request = await https.get(element, function (response) {
     response.pipe(file);
-    // file catch error
-  
-
-   
-    
+    // file catch error 
     file.on("finish", () => {
       file.close();
       console.log("Download Completed");
@@ -277,8 +274,10 @@ async function uplaod(dir, isLast, res, packProp) {
       if (isLast === stickersDir.length - 1) {
         console.log('download done');
         if (stickersArray[0].includes('.png')) {
+          packProp.animated = false
           convertAllToWebp(dir, 0, res, packProp)
         } else if (stickersArray[0].includes('.gif')) {
+          packProp.animated = true
           convertAllGifToWebp(dir, 0, res, packProp)
         } else if (tickersArray[0].includes('.webp'))
           insertStickersData(res, packProp)
@@ -293,14 +292,23 @@ async function uplaod(dir, isLast, res, packProp) {
 
 
 async function insertStickersData(res, packProp) {
-  console.log(packProp);
+  console.log(packProp.animated);
+
+  stickersArray.forEach(function (value, i) {
+    
+    stickersArray[i] =value.replace('.png','.webp')
+    stickersArray[i] =value.replace('.gif','.webp')
+    console.log(stickersArray[i]);
+});
+  
+
   const responce = await prisma.pack_stickers.create({
     data: {
       cid: packProp.cid,
       name: packProp.name,
       stickers: stickersArray.toString(),
       folder: packProp.folderName,
-      animated_sticker_pack: true
+      animated_sticker_pack: packProp.animated
     }
   });
 
@@ -317,11 +325,9 @@ async function insertStickersData(res, packProp) {
 
 async function convertAllToWebp(dir, index, res, packProp) {
 
-  console.log('convert ');
-  console.log(index);
-  console.log(stickersArray.length);
+  console.log('convert png ' + index);
   console.log(stickersArray[index]);
-  packProp.animated = false
+
   sharp(dir + '/' + stickersArray[index])
     .rotate()
     .resize(512, 512)
@@ -332,6 +338,7 @@ async function convertAllToWebp(dir, index, res, packProp) {
     .then(data => {
       if (index === stickersArray.length - 1) {
         console.log('all done convert');
+        stickersArray[indexConvert] = stickersArray[indexConvert].replace('.png', '.webp')
         insertStickersData(res, packProp)
       } else {
         fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
@@ -350,21 +357,25 @@ async function convertAllToWebp(dir, index, res, packProp) {
     });
 }
 convertAllGifToWebp = async (dir, index, res, packProp) => {
-  console.log('convert gif to webp');
+  console.log('convert gif to webp ' + index);
   packProp.animated = true
   const result = webp.gwebp(dir + '/' + stickersArray[index], dir + '/' + stickersArray[index].replace('.gif', '.webp'), "-q 80", logging = "-v");
+
   result.then((response) => {
     if (index === stickersArray.length - 1) {
       console.log('all done convert gif to webp');
       insertStickersData(res, packProp)
+      fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
+        if (err) {
+          console.error(err)
+        }
+      })
     } else {
       fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
         if (err) {
           console.error(err)
         }
       })
-
-      stickersArray[indexConvert] = stickersArray[indexConvert].replace('.gif', '.webp')
       indexConvert++;
       convertAllGifToWebp(dir, indexConvert, res, packProp)
     }
