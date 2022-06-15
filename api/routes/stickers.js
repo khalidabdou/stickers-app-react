@@ -12,6 +12,8 @@ var https = require('https');
 var sizeOf = require('image-size');
 const sharp = require('sharp');
 
+
+
 var index = 0;
 var indexConvert = 0;
 let stickersDir = [];
@@ -151,19 +153,27 @@ router.put('/:id', async function (req, res) {
 
 
 router.get('/sharp', async function (req, res) {
-  sharp('./uploads/packs/tray.png')
-    .rotate()
-    .resize(521, 521)
-    .toFile('./uploads/packs/tray.webp', (err, info) => {
-      console.log(err, info);
-    })
-    .toBuffer()
-    .then(data => {
-      return res.json('success')
-    })
-    .catch(err => {
-      return res.json(err)
-    });
+
+  const result = webp.gwebp("./uploads/packs/7vi7i/sticker_1.gif", "./uploads/packs/sticker_1.webp", "-q 80", logging = "-v");
+  result.then((response) => {
+    console.log(response);
+  });
+
+
+  // sharp('./uploads/packs/7vi7i/sticker_1.gif')
+  //   .rotate()
+  //   .resize(521, 521)
+  //   .toFile('./uploads/packs/tray.webp', (err, info) => {
+  //     console.log(err, info);
+  //   })
+
+  //   .toBuffer()
+  //   .then(data => {
+  //     return res.json('success')
+  //   })
+  //   .catch(err => {
+  //     return res.json(err)
+  //   });
 
 })
 
@@ -255,14 +265,22 @@ async function uplaod(dir, isLast, res, packProp) {
   const file = await fs.createWriteStream(dir + '/' + path.basename(parsed.pathname));
   const request = await https.get(element, function (response) {
     response.pipe(file);
+    // file catch error
+  
+
+   
+    
     file.on("finish", () => {
       file.close();
       console.log("Download Completed");
+
       if (isLast === stickersDir.length - 1) {
         console.log('download done');
         if (stickersArray[0].includes('.png')) {
           convertAllToWebp(dir, 0, res, packProp)
-        } else
+        } else if (stickersArray[0].includes('.gif')) {
+          convertAllGifToWebp(dir, 0, res, packProp)
+        } else if (tickersArray[0].includes('.webp'))
           insertStickersData(res, packProp)
       } else {
         index++;
@@ -299,11 +317,11 @@ async function insertStickersData(res, packProp) {
 
 async function convertAllToWebp(dir, index, res, packProp) {
 
-  //console.log(dir);
+  console.log('convert ');
   console.log(index);
   console.log(stickersArray.length);
   console.log(stickersArray[index]);
-
+  packProp.animated = false
   sharp(dir + '/' + stickersArray[index])
     .rotate()
     .resize(512, 512)
@@ -331,7 +349,28 @@ async function convertAllToWebp(dir, index, res, packProp) {
       return res.json(err)
     });
 }
+convertAllGifToWebp = async (dir, index, res, packProp) => {
+  console.log('convert gif to webp');
+  packProp.animated = true
+  const result = webp.gwebp(dir + '/' + stickersArray[index], dir + '/' + stickersArray[index].replace('.gif', '.webp'), "-q 80", logging = "-v");
+  result.then((response) => {
+    if (index === stickersArray.length - 1) {
+      console.log('all done convert gif to webp');
+      insertStickersData(res, packProp)
+    } else {
+      fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
+        if (err) {
+          console.error(err)
+        }
+      })
 
+      stickersArray[indexConvert] = stickersArray[indexConvert].replace('.gif', '.webp')
+      indexConvert++;
+      convertAllGifToWebp(dir, indexConvert, res, packProp)
+    }
+  });
+
+}
 
 
 module.exports = router;
