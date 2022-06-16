@@ -154,7 +154,6 @@ router.put('/:id', async function (req, res) {
 
 
 router.get('/sharp', async function (req, res) {
-
   const result = webp.gwebp("./uploads/packs/7vi7i/sticker_1.gif", "./uploads/packs/sticker_1.webp", "-q 80", logging = "-v");
   result.then((response) => {
     console.log(response);
@@ -167,7 +166,6 @@ router.get('/sharp', async function (req, res) {
   //   .toFile('./uploads/packs/tray.webp', (err, info) => {
   //     console.log(err, info);
   //   })
-
   //   .toBuffer()
   //   .then(data => {
   //     return res.json('success')
@@ -175,6 +173,30 @@ router.get('/sharp', async function (req, res) {
   //   .catch(err => {
   //     return res.json(err)
   //   });
+
+})
+
+router.put('/updateStickerItem/:id', async (req, res) => {
+
+  console.log(req.params.id);
+
+  const id = parseInt(req.params.id)
+  const stickersUpdate= req.query.stickers
+  console.log(stickersUpdate);
+  const pack = await prisma.pack_stickers.update({
+    where: {
+      identifier: id
+    },
+    data:{
+      stickers:stickersUpdate
+    }
+  })
+  if (pack) {
+    res.json(pack)
+  }
+  else res.json('error')
+
+  
 
 })
 
@@ -279,7 +301,7 @@ async function uplaod(dir, isLast, res, packProp) {
         } else if (stickersArray[0].includes('.gif')) {
           packProp.animated = true
           convertAllGifToWebp(dir, 0, res, packProp)
-        } else if (tickersArray[0].includes('.webp'))
+        } else if (stickersArray[0].includes('.webp'))
           insertStickersData(res, packProp)
       } else {
         index++;
@@ -295,12 +317,12 @@ async function insertStickersData(res, packProp) {
   console.log(packProp.animated);
 
   stickersArray.forEach(function (value, i) {
-    
-    stickersArray[i] =value.replace('.png','.webp')
-    stickersArray[i] =value.replace('.gif','.webp')
+
+    stickersArray[i] = value.replace('.png', '.webp')
+    stickersArray[i] = value.replace('.gif', '.webp')
     console.log(stickersArray[i]);
-});
-  
+  });
+
 
   const responce = await prisma.pack_stickers.create({
     data: {
@@ -364,12 +386,13 @@ convertAllGifToWebp = async (dir, index, res, packProp) => {
   result.then((response) => {
     if (index === stickersArray.length - 1) {
       console.log('all done convert gif to webp');
-      insertStickersData(res, packProp)
+
       fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
         if (err) {
           console.error(err)
         }
       })
+      insertStickersData(res, packProp)
     } else {
       fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
         if (err) {

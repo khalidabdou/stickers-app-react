@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, Button, Image ,FormCheck} from 'react-bootstrap';
 import { API_STICKERS } from "../services/api";
 import stickersService from '../services/stickers.service';
+import Sticker from './Sticker'
 
 class Pack extends Component {
     constructor(props) {
@@ -57,10 +58,9 @@ class Pack extends Component {
                     </Card.Title>
                     <Card.Text className='m-1'>
                         {this.state.stickers.map((item, index) => {
-                            return <Image key={index} src={API_STICKERS + this.state.pack.folder + '/' + item} className='m-2' rounded width={70} height={70} />
+                            return <Sticker index={index}  src={API_STICKERS + this.state.pack.folder + '/' + item} />
                         }
                         )}
-
                     </Card.Text>
                     <Button className='m-2' variant="outline-danger" onClick={() => this.props.delete(this.props.pack.identifier)}>Delete Pack</Button>
                     <FormCheck type="checkbox" label="Enable" className='m-2 ' checked= { this.state.enabled } onChange={this.setEnable}/>
