@@ -48,6 +48,13 @@ class Pack extends Component {
         )
     }
 
+    delete=sti=>{
+        console.log(sti);
+        const newPack=this.state.stickers.filter(itm => itm !== sti)
+        console.log(newPack);
+        this.setState({stickers:newPack})
+    }
+
 
     render() {
         return (
@@ -58,7 +65,7 @@ class Pack extends Component {
                     </Card.Title>
                     <Card.Text className='m-1'>
                         {this.state.stickers.map((item, index) => {
-                            return <Sticker index={index}  src={API_STICKERS + this.state.pack.folder + '/' + item} />
+                            return <Sticker index={index}  src={API_STICKERS + this.state.pack.folder + '/' + item} delete={()=>this.delete(item)}/>
                         }
                         )}
                     </Card.Text>
