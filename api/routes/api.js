@@ -8,7 +8,7 @@ router.get('/categories', async function (req, res) {
         take: 50,
     })
 
-    res.json(categories)
+    res.json({categories:categories})
 
 });
 
@@ -17,7 +17,7 @@ router.get('/stickers', async function (req, res) {
     const stickers = await prisma.pack_stickers.findMany({
 
     })
-    res.json(stickers)
+    res.json({stickers:stickers})
 
 });
 
@@ -28,7 +28,7 @@ router.get('/categoriesByLanguage', async function (req, res) {
             language_app: language
         }
     })
-    res.json(categories)
+    res.json({categories:categories})
 
 });
 
@@ -40,7 +40,7 @@ router.get('/stickersByCategory', async function (req, res) {
             cid: category
         }
     })
-    res.json(stickers)
+    res.json({stickers:stickers})
 
 });
 
@@ -49,7 +49,7 @@ router.get('/stickersByCategory', async function (req, res) {
 router.get('/languages', async function (req, res) {
 
     const languages = await prisma.tbl_language.findMany({})
-    res.json(languages)
+    res.json({languages: languages})
 
 });
 
