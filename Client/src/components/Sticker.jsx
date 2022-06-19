@@ -7,15 +7,18 @@ class Sticker extends Component {
         this.state = {
             index: this.props.index,
             src: this.props.src,
-            delete:this.props.delete
+            delete:this.props.delete,
+          
         }
     }
     
     render() {
+        
         return (
             <>
             <CloseButton onClick={this.state.delete}></CloseButton>
-            <Image key={this.state.index} src={this.state.src} className='m-2' rounded width={70} height={70} />
+           
+            <Image onLoad={this.onImgLoad} key={this.state.index} src={this.state.src} className='m-2' rounded width={70} height={70} />
             </>
            
 

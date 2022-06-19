@@ -55,7 +55,6 @@ router.post('/', async function (req, res) {
       //loop all files
       await stickers.forEach(async sticker => {
         await sticker.mv('./uploads/packs/' + folderName + '/' + sticker.name);
-
       });
 
     } catch (err) {
@@ -320,7 +319,7 @@ async function insertStickersData(res, packProp) {
 
     stickersArray[i] = value.replace('.png', '.webp')
     stickersArray[i] = value.replace('.gif', '.webp')
-    console.log(stickersArray[i]);
+  
   });
 
 
