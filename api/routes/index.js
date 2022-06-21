@@ -4,9 +4,6 @@ var router = express.Router();
 /* GET home page. */
 router.post('/login', function (req, res) {
 
-
-
-
     const username = req.body.username
     const password = req.body.password
     console.log(req.body);
@@ -24,7 +21,7 @@ router.post('/login', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    res.send('<h1>Hello World!</h1>');
+    res.render('index');
 });
 
 module.exports = router;
