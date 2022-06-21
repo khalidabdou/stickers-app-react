@@ -12,10 +12,10 @@ model pack_stickers {
   cid                     Int
   name                    String   @db.Text
   animated_sticker_pack   Boolean? @default(false)
-  android_play_store_link String   @default("") @db.Text
+  android_play_store_link String   @default("https://play.google.com/store/apps/details?id=com.everyday.stickers") @db.Text
   stickers                String   @default("") @db.Text
-  count_set_to_whatsapp   Int?     @default(0)
-  count_views             Int?     @default(10)
+  count_set_to_whatsapp   Int?     @default(128)
+  count_views             Int?     @default(299)
   folder                  String   @default("") @db.Text
   enabled                 Boolean  @default(true)
   tbl_cat                 tbl_cat  @relation(fields: [cid], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "pack_stickers_ibfk_1")
