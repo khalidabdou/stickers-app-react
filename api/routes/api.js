@@ -55,13 +55,17 @@ router.get('/languages', async function (req, res) {
 
 router.post('/incrementAdd', function (req, res) {
 
-    const sticker = parseInt(req.query.sticker)
+    const sticker = parseInt(req.query.id)
     const responce = prisma.pack_stickers.update({
+        where:{
+            identifier: sticker
+        },
         data: {
             count_set_to_whatsapp: {
                 increment: 1
             }
         }
+
     })
     res.json(responce)
 

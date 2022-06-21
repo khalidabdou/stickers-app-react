@@ -34,8 +34,6 @@ class Pack extends Component {
     }
 
     setEnable = (checked) => {
-    
- 
         this.setState({enabled:  checked.target.checked})
         const responce=stickersService.setEnablePack(this.state.pack.identifier,checked.target.checked)
         responce.then(res => {
