@@ -3,7 +3,7 @@ import Pack from "../components/Pack";
 import ModelAddPack from "../components/ModelAddPack";
 import { DropdownButton, Dropdown, Toast, Nav, ToastContainer } from 'react-bootstrap';
 import stickersService from "../services/stickers.service";
-
+import Pagination from 'react-bootstrap/Pagination'
 
 class Packs extends Component {
 
@@ -14,6 +14,8 @@ class Packs extends Component {
             respo: "",
             packs: [],
             categories: [],
+            count:0,
+            selectedPage:0,
         }
     }
 
@@ -21,7 +23,7 @@ class Packs extends Component {
 
     componentDidMount() {
         stickersService.getStickers().then(response => {
-            
+
             this.setState({ packs: response.data });
         })
 
@@ -57,7 +59,9 @@ class Packs extends Component {
 
     }
 
-   
+
+
+
     render() {
         return (
             <div className="container">
@@ -74,6 +78,20 @@ class Packs extends Component {
                 {this.state.packs.map(pack => (
                     <Pack key={pack.id} pack={pack} delete={this.deletePack} />))}
                 {this.showToast()}
+                <Pagination>
+                    <Pagination.First />
+                    <Pagination.Prev />
+            
+                    <Pagination.Item>{1}</Pagination.Item>
+                    <Pagination.Item>{10}</Pagination.Item>
+                    <Pagination.Item>{11}</Pagination.Item>
+                    <Pagination.Item active>{12}</Pagination.Item>
+                    <Pagination.Item>{13}</Pagination.Item>
+                    <Pagination.Item>{20}</Pagination.Item>
+
+                    <Pagination.Next />
+                    <Pagination.Last />
+                </Pagination>
             </div>
         )
     }
