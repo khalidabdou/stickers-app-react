@@ -7,7 +7,7 @@ router.get('/categories', async function (req, res) {
     const categories = await prisma.tbl_cat.findMany({
         take: 50,
         where :{
-            
+
             language_app:1
         }
     })
@@ -52,7 +52,11 @@ router.get('/stickersByCategory', async function (req, res) {
 
 
 router.get('/languages', async function (req, res) {
-    const languages = await prisma.tbl_language.findMany({})
+    const languages = await prisma.tbl_language.findMany({
+        where:{
+            dispo:true
+        }
+    })
     res.json({languages: languages})
 
 });
