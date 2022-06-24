@@ -7,6 +7,7 @@ router.get('/categories', async function (req, res) {
     const categories = await prisma.tbl_cat.findMany({
         take: 50,
         where :{
+            
             language_app:1
         }
     })

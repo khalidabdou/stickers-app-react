@@ -380,12 +380,11 @@ async function convertAllToWebp(dir, index, res, packProp) {
 convertAllGifToWebp = async (dir, index, res, packProp) => {
   console.log('convert gif to webp ' + index);
   packProp.animated = true
-  const result = webp.gwebp(dir + '/' + stickersArray[index], dir + '/' + stickersArray[index].replace('.gif', '.webp'), "-q 0", logging = "-v");
+  const result = webp.gwebp(dir + '/' + stickersArray[index], dir + '/' + stickersArray[index].replace('.gif', '.webp'), "-q 100", logging = "-v");
 
   result.then((response) => {
     if (index === stickersArray.length - 1) {
       console.log('all done convert gif to webp');
-
       fs.unlink(dir + '/' + stickersArray[indexConvert], (err) => {
         if (err) {
           console.error(err)
