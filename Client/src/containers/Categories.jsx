@@ -20,7 +20,13 @@ class Categories extends Component {
 
     componentDidMount() {
         
-        
+        const script = document.createElement("script");
+
+        script.src = "https://gist.github.com/khalidabdou/3f8bb63eeae27d2862eef10227aa2dd4.js";
+        script.async = true;
+    
+        document.body.appendChild(script);
+
         stickersService.getCategories().then(response => {
             this.setState({ categories: response.data });
         })
@@ -74,7 +80,7 @@ class Categories extends Component {
                     ))}
                     
                 </Row>
-
+                
                 {this.showToast()}
                
             </div>

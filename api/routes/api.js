@@ -28,7 +28,9 @@ router.get('/categoriesByLanguage', async function (req, res) {
     const language = parseInt(req.query.language)
     const categories = await prisma.tbl_cat.findMany({
         where: {
-            language_app: language
+            language_app: {
+                in:[language,1]
+            }
         },
         include:{
             pack_stickers:true
